@@ -1,0 +1,109 @@
+@model school.ViewModels.RegisterCourseVM
+@{
+    ViewData["Title"] = "Registration Management";
+}
+
+<div class="container my-5">
+    <!-- Header Section -->
+    <div class="register">
+        <div>
+            <h1>Enrollments</h1>
+            <p>Manage student course enrollments and grades.</p>
+        </div>
+        <div class="link1">
+            <a asp-action="Create" style="color:white;text-decoration:none;">Create New</a>
+        </div>
+    </div>
+
+    <!-- Filter & Search Card -->
+    <div class="search">
+        <div class="searchContain">
+            <div class="imageContain">
+                <img src="~/asset/stu.jpg" class="image"/>
+            </div>
+            
+            <!-- Updated form parameters to match the action signature -->
+            <form asp-controller="Register" asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="searchStudent d-flex gap-2 align-items-center">
+                    
+                    <!-- Course Filter Dropdown -->
+                    <div class="searchSelect">
+                        <select asp-for="SelectedCourseName" asp-items="Model.Courses" class="form-control bg-light form-border">
+                            <option value="">All Courses</option>
+                        </select>
+                    </div>
+
+                    <!-- Student Name Search Textbox -->
+                    <div class="searchInput">
+                        <input type="text" asp-for="SearchString" class="form-border form-control bg-light" placeholder="Enter Student Name" />
+                    </div>
+
+                    <div>
+                        <button type="submit" class="searchButton">Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="listStudent">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="ps-4 text-uppercase fs-7 text-muted">Id</th>
+                        <th class="text-uppercase fs-7 text-muted">Student</th>
+                        <th class="text-uppercase fs-7 text-muted">Course</th>
+                        <th class="text-uppercase fs-7 text-muted text-center">Grade</th>
+                        <th class="action pe-4 text-end text-uppercase fs-7 text-muted">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Registrations == null || !Model.Registrations.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="noData text-center p-4">No matching records found.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model.Registrations)
+                        {
+                            <tr onclick="location.href='@Url.Action("Details", "Register", new { id = item.Id })'" style="cursor: pointer;">
+                                <td class="ps-4">@item.Id</td>
+                                <td>@item.Student?.Name</td>
+                                <td>@item.Course?.CourseName</td>
+
+                             <td class="text-center">
+                                    @{
+                                        var gradeColor = item.Grade switch
+                                        {
+                                            "A" or "A+" or "A-" => "gradeGreen",
+                                            "B+" or "B" or "B-" => "gradeYellow",
+                                            _ => "gradeRed",
+                                        };
+                                    }
+                                    <span class="@gradeColor">
+                                        @Html.DisplayFor(model => item.Grade)
+                                    </span>
+                                </td>
+
+                              <td class="pe-4 text-end" >
+                            <div class="manage" >
+                                        <a   asp-action="Edit" asp-route-id="@item.Id" style="text-align:center; text-decoration:none;color:white;background-color:#3A86FF; width:80px; border-radius:3px; height:30px; margin-left:100px; " title="Edit">
+                                           Edit
+                                        </a>
+                                        <a    asp-action="Delete" asp-route-id="@item.Id" style="text-align:center; text-decoration:none;color:white;background-color:red; width:80px; margin-top:3px; border-radius:3px; height:30px; margin-left:100px;" title="Delete">
+                                          Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

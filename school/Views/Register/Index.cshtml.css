@@ -1,0 +1,90 @@
+/* CSS for Index view */
+.register{
+    display:flex;
+    justify-content:space-between;
+    box-shadow:black 3px 3px inset;
+    border-radius:25px;
+    padding:10px;
+    align-items:center;
+}
+.create{
+    text-decoration:none !important;
+    color:red !important;
+}
+.link1 {
+    background-color: #006199;
+    padding: 10px;
+    border-radius: 5px;
+}
+.link1:hover {
+        background-color: #30497D;
+        
+    }
+
+.search {
+    margin-top: 50px;
+    background-color: #2A6B5C;
+    border-radius:5px;
+    height:250px;
+}
+
+.searchStudent{
+  
+    display:flex;
+    justify-content:center;
+    margin-top:20px;
+    gap:5px;
+    
+}
+.searchInput{
+    width:300px;
+}
+.searchButton {
+    background-color: #3A86FF;
+    width:150px;
+    height:40px;
+    border-radius:8px;
+    color:white;
+    font:bold;
+    border:none;
+
+
+}
+
+.imageContain {
+    width: 100%;
+    height: 200px;
+    overflow: hidden; 
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    border-radius:5px;
+   
+}
+.listStudent{
+    margin-top:50px;
+}
+.noData{
+    margin-left:auto;
+    color:red;
+    text-align:center;
+    height:100px;
+}
+.gradeGreen{
+    color:green;
+
+}
+.gradeYellow {
+    color: #FF9100;
+}
+.gradeRed{
+    color:red;
+}
+.manage{
+    display:flex;
+    flex-direction:column;
+    align-items:end;
+
+}

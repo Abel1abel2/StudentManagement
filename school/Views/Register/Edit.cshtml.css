@@ -1,0 +1,52 @@
+/* CSS for Edit view */
+.studentEdit {
+    background-color: #2A6B5C;
+    color: white;
+    font-size: 32px;
+    text-align: center;
+    height: 80px;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    box-shadow: inset -3px -3px 2px 0px #2C2C2C;
+    border-radius: 5px;
+}
+.editForm {
+ 
+        background-image: url('/asset/reg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 700px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        padding-top: 100px;
+        justify-content: space-between;
+        color: #FF7F50;
+        font-weight: 900;
+        font-size: 26px;
+  
+        
+}
+.editBtn{
+    margin-left:110px;
+    margin-top:10px;
+    display:flex;
+    justify-content:space-between;
+    width:300px;
+ 
+}
+.editInput{
+    width:300px;
+    margin-left:110px;
+}
+.saveBtn {
+    width: 100px;
+    height: 35px;
+    background-color: #30AFFF;
+    color:white;
+    border-radius:5px;
+    border:none;
+    cursor:pointer;
+}

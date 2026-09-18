@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="contain">
+   
+    <div class="student">
+
+        <div class="content">
+            <h1 class="head1">Welcome to Student Management</h1>
+            <h1 class="head2">Start Enrollment Today</h1>
+        </div>
+        <div>
+            <p>
+            you can create,edit,delete and watch student details</p>
+           <p> also you can enroll students with their course and grade
+            </p>
+        </div>
+
+        <div class="homeBtn">
+            <div class="startBtn">
+            <a style="text-decoration:none;color:white;" asp-area="" asp-controller="Student" asp-action="Index">Get Started</a>
+            </div>
+            <div  class="enrollBtn startBtn">
+             <a style="text-decoration:none;color:white;" asp-area="" asp-controller="Register" asp-action="Index">Enroll Student</a>
+             </div>
+        </div>
+
+     
+
+     
+
+
+    </div>
+     <div class="sideCard">
+         <a asp-controller="Course" asp-action="Index" class="card-link" style="text-decoration: none; color: inherit;">
+ 
+      <div class="courseCard card1">
+          <img src="/asset/school.jfif" style="height:300px;" />
+          <p style="font-size:12px;">Manage your Courses Here, you can edit,create and delete Courses</p>
+      </div>
+      </a>
+       
+       <div class="courseCard card2">
+
+      </div>
+      
+       <a asp-controller="Student" asp-action="Index" class="card-link" style="text-decoration: none; color: inherit;">
+       <div class="courseCard card3">
+            <img src="/asset/school.jfif" style="height:300px;" />
+          <p style="font-size:12px;">Manage your Students Here, you can edit,create and delete Students</p>
+    
+      </div>
+      </a>
+
+      </div>
+   
+  
+</div>
