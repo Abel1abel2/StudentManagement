@@ -19,13 +19,13 @@
     <div class="search">
         <div class="searchContain">
             <div class="imageContain">
-                <img src="~/asset/stu.jpg" class="image"/>
+                <img src="~/asset/stu.jpg" class="image" />
             </div>
-            
-            <!-- Updated form parameters to match the action signature -->
+
+            <!-- Form parameters match the controller action signature -->
             <form asp-controller="Register" asp-action="Index" method="get" class="row g-3 align-items-end">
                 <div class="searchStudent d-flex gap-2 align-items-center">
-                    
+
                     <!-- Course Filter Dropdown -->
                     <div class="searchSelect">
                         <select asp-for="SelectedCourseName" asp-items="Model.Courses" class="form-control bg-light form-border">
@@ -72,10 +72,11 @@
                         {
                             <tr onclick="location.href='@Url.Action("Details", "Register", new { id = item.Id })'" style="cursor: pointer;">
                                 <td class="ps-4">@item.Id</td>
-                                <td>@item.Student?.Name</td>
-                                <td>@item.Course?.CourseName</td>
 
-                             <td class="text-center">
+                                <td>@item.StudentName</td>
+                                <td>@item.CourseName</td>
+
+                                <td class="text-center">
                                     @{
                                         var gradeColor = item.Grade switch
                                         {
@@ -89,13 +90,13 @@
                                     </span>
                                 </td>
 
-                              <td class="pe-4 text-end" >
-                            <div class="manage" >
-                                        <a   asp-action="Edit" asp-route-id="@item.Id" style="text-align:center; text-decoration:none;color:white;background-color:#3A86FF; width:80px; border-radius:3px; height:30px; margin-left:100px; " title="Edit">
-                                           Edit
+                                <td class="pe-4 text-end" onclick="event.stopPropagation();">
+                                    <div class="manage">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" style="text-align:center; text-decoration:none;color:white;background-color:#3A86FF; width:80px; border-radius:3px; height:30px; margin-left:100px; display:inline-block; line-height:30px;" title="Edit">
+                                            Edit
                                         </a>
-                                        <a    asp-action="Delete" asp-route-id="@item.Id" style="text-align:center; text-decoration:none;color:white;background-color:red; width:80px; margin-top:3px; border-radius:3px; height:30px; margin-left:100px;" title="Delete">
-                                          Delete
+                                        <a asp-action="Delete" asp-route-id="@item.Id" style="text-align:center; text-decoration:none;color:white;background-color:red; width:80px; margin-top:3px; border-radius:3px; height:30px; margin-left:100px; display:inline-block; line-height:30px;" title="Delete">
+                                            Delete
                                         </a>
                                     </div>
                                 </td>

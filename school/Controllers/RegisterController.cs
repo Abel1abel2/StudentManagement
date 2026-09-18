@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using school.Models;
 using school.Data;
-using school.ViewModels; // Added this to recognize your RegistrationViewModel
+using school.ViewModels;
+using school.DTOs;
 
 public class RegisterController : Controller
 {
@@ -15,47 +16,54 @@ public class RegisterController : Controller
     }
 
     // GET: REGISTERS
-    // GET: REGISTERS
     public async Task<IActionResult> Index(string selectedCourseName, string searchString)
     {
         if (_context.Registers == null)
         {
             return Problem("Entity set 'ApplicationDBContext.Registers' is null.");
         }
+
         IQueryable<string> courseQuery = from r in _context.Registers
                                          where r.Course != null
                                          orderby r.Course.CourseName
                                          select r.Course.CourseName;
 
-        var registrations = from r in _context.Registers
-                            .Include(r => r.Student)
-                            .Include(r => r.Course)
-                            select r;
+        var registrationsQuery = _context.Registers
+            .Include(r => r.Student)
+            .Include(r => r.Course)
+            .AsNoTracking();
 
-      
         if (!string.IsNullOrEmpty(searchString))
         {
-            registrations = registrations.Where(s => s.Student!.Name.ToUpper().Contains(searchString.ToUpper()));
+            registrationsQuery = registrationsQuery.Where(s => s.Student!.Name.ToUpper().Contains(searchString.ToUpper()));
         }
 
-       
         if (!string.IsNullOrEmpty(selectedCourseName))
         {
-            registrations = registrations.Where(x => x.Course!.CourseName == selectedCourseName);
+            registrationsQuery = registrationsQuery.Where(x => x.Course!.CourseName == selectedCourseName);
         }
 
-      
+        // Projecting straight into DTO objects
+        var dtos = await registrationsQuery.Select(r => new RegistrationDto
+        {
+            Id = r.Id,
+            StudentId = r.StudentId,
+            StudentName = r.Student != null ? r.Student.Name : "N/A",
+            CourseId = r.CourseId,
+            CourseName = r.Course != null ? r.Course.CourseName : "N/A",
+            Grade = r.Grade
+        }).ToListAsync();
+
         var registrationCourseVM = new RegisterCourseVM
         {
             Courses = new SelectList(await courseQuery.Distinct().ToListAsync()),
-            Registrations = await registrations.ToListAsync(),
+            Registrations = dtos,
             SearchString = searchString,
             SelectedCourseName = selectedCourseName
         };
 
         return View(registrationCourseVM);
     }
-
 
     // GET: REGISTERS/Details/5
     public async Task<IActionResult> Details(int? id)
@@ -71,19 +79,18 @@ public class RegisterController : Controller
             .AsNoTracking()
             .FirstOrDefaultAsync(m => m.Id == id);
 
-      
         if (register == null)
         {
             return NotFound();
         }
+
         var detailVM = new RegisterDetailVM
         {
-            Id=id,
+            Id = id,
             StudentId = register.StudentId,
-            Name = register.Student.Name,
-            CourseName=register.Course.CourseName,
+            Name = register.Student?.Name ?? "N/A",
+            CourseName = register.Course?.CourseName ?? "N/A",
             Grade = register.Grade,
-
         };
 
         return View(detailVM);
@@ -109,17 +116,16 @@ public class RegisterController : Controller
     // POST: REGISTERS/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    
     public async Task<IActionResult> Create(RegistrationViewModel model)
     {
         if (ModelState.IsValid)
         {
-          
+            // Map incoming safe DTO data directly to Database entity
             var register = new Register
             {
-                StudentId = model.StudentId,
-                CourseId = model.CourseId,
-                Grade = model.Grade
+                StudentId = model.RegistrationData.StudentId,
+                CourseId = model.RegistrationData.CourseId,
+                Grade = model.RegistrationData.Grade
             };
 
             _context.Add(register);
@@ -127,7 +133,6 @@ public class RegisterController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-      
         model.StudentOptions = await _context.Students.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name }).ToListAsync();
         model.CourseOptions = await _context.Courses.Select(c => new SelectListItem { Value = c.CourseId.ToString(), Text = c.CourseName }).ToListAsync();
         return View(model);
@@ -146,15 +151,30 @@ public class RegisterController : Controller
         {
             return NotFound();
         }
-        return View(register);
+
+        // Package database parameters cleanly into the ViewModel using our Save DTO
+        var viewModel = new RegistrationViewModel
+        {
+            RegistrationData = new SaveRegistrationDto
+            {
+                Id = register.Id,
+                StudentId = register.StudentId,
+                CourseId = register.CourseId,
+                Grade = register.Grade
+            },
+            StudentOptions = await _context.Students.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name }).ToListAsync(),
+            CourseOptions = await _context.Courses.Select(c => new SelectListItem { Value = c.CourseId.ToString(), Text = c.CourseName }).ToListAsync()
+        };
+
+        return View(viewModel);
     }
 
     // POST: REGISTERS/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,StudentId,CourseId,Grade")] Register register)
+    public async Task<IActionResult> Edit(int? id, RegistrationViewModel model)
     {
-        if (id != register.Id)
+        if (id != model.RegistrationData.Id)
         {
             return NotFound();
         }
@@ -163,12 +183,21 @@ public class RegisterController : Controller
         {
             try
             {
+                // Remap updated user DTO changes into a fresh tracking entity
+                var register = new Register
+                {
+                    Id = model.RegistrationData.Id,
+                    StudentId = model.RegistrationData.StudentId,
+                    CourseId = model.RegistrationData.CourseId,
+                    Grade = model.RegistrationData.Grade
+                };
+
                 _context.Update(register);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RegisterExists(register.Id))
+                if (!RegisterExists(model.RegistrationData.Id))
                 {
                     return NotFound();
                 }
@@ -179,7 +208,10 @@ public class RegisterController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        return View(register);
+
+        model.StudentOptions = await _context.Students.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name }).ToListAsync();
+        model.CourseOptions = await _context.Courses.Select(c => new SelectListItem { Value = c.CourseId.ToString(), Text = c.CourseName }).ToListAsync();
+        return View(model);
     }
 
     // GET: REGISTERS/Delete/5
@@ -193,13 +225,24 @@ public class RegisterController : Controller
         var register = await _context.Registers
             .Include(r => r.Student)
             .Include(r => r.Course)
+            .AsNoTracking()
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (register == null)
         {
             return NotFound();
         }
 
-        return View(register);
+        // Map to a clean, read-only DTO for safety
+        var dto = new RegistrationDto
+        {
+            Id = register.Id,
+            StudentName = register.Student?.Name ?? "N/A",
+            CourseName = register.Course?.CourseName ?? "N/A",
+            Grade = register.Grade
+        };
+
+        return View(dto);
     }
 
     // POST: REGISTERS/Delete/5
@@ -217,8 +260,8 @@ public class RegisterController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private bool RegisterExists(int? id)
+    private bool RegisterExists(int id)
     {
-        return _context.Registers.Any(e => e.Id == id); 
+        return _context.Registers.Any(e => e.Id == id);
     }
 }

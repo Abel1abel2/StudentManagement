@@ -1,11 +1,11 @@
-@model school.Models.Register
+@model school.ViewModels.RegistrationViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
 <div class="studentEdit">
-<h1>Update Student Enrollment</h1>
+    <h1>Update Student Enrollment</h1>
 </div>
 
 <hr />
@@ -13,51 +13,47 @@
     <div class="editForm">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            
+            <!-- Hidden inputs tracking the key identifiers -->
+            <input type="hidden" asp-for="RegistrationData.Id" />
 
+            <!-- 1. Student Selection Dropdown -->
             <div class="editInput">
-                <label asp-for="StudentId" class="control-label"></label>
-                <input asp-for="StudentId" class="form-control" />
-                <span asp-validation-for="StudentId" class="text-danger"></span>
+                <label asp-for="RegistrationData.StudentId" class="control-label">Student Name</label>
+                <select asp-for="RegistrationData.StudentId" asp-items="Model.StudentOptions" class="form-select form-control">
+                    <option value="">Select Student</option>
+                </select>
+                <span asp-validation-for="RegistrationData.StudentId" class="text-danger"></span>
             </div>
 
+            <!-- 2. Course Selection Dropdown -->
             <div class="editInput">
-                <label asp-for="Student" class="control-label"></label>
-                <input asp-for="Student" class="form-control" />
-                <span asp-validation-for="Student" class="text-danger"></span>
+                <label asp-for="RegistrationData.CourseId" class="control-label">Course Name</label>
+                <select asp-for="RegistrationData.CourseId" asp-items="Model.CourseOptions" class="form-select form-control">
+                    <option value="">Select Course</option>
+                </select>
+                <span asp-validation-for="RegistrationData.CourseId" class="text-danger"></span>
             </div>
 
+            <!-- 3. Grade Text Input -->
             <div class="editInput">
-                <label asp-for="CourseId" class="control-label"></label>
-                <input asp-for="CourseId" class="form-control" />
-                <span asp-validation-for="CourseId" class="text-danger"></span>
+                <label asp-for="RegistrationData.Grade" class="control-label">Grade</label>
+                <input asp-for="RegistrationData.Grade" class="form-control" type="text" placeholder="Grade A-F" />
+                <span asp-validation-for="RegistrationData.Grade" class="text-danger"></span>
             </div>
-
-            <div class="editInput">
-                <label asp-for="Course" class="control-label"></label>
-                <input asp-for="Course" class="form-control" />
-                <span asp-validation-for="Course" class="text-danger"></span>
-            </div>
-
-            <div class="editInput">
-                <label asp-for="Grade" class="control-label"></label>
-                <input asp-for="Grade" class="form-control" />
-                <span asp-validation-for="Grade" class="text-danger"></span>
-            </div>
+            
             <div class="editBtn">
-            <div >
-                <input type="submit" value="Save" class="saveBtn" />
+                <div>
+                    <input type="submit" value="Save" class="saveBtn" />
+                </div>
+                <div>
+                   <a asp-action="Index" style="display: flex; justify-content: center; align-items: center; text-decoration: none; color:#524646; background-color:#E3F2FD; width: 100px; height: 35px; border-radius: 5px; font-size: 20px;">Back </a>
+                </div>
             </div>
-            <div>
-               <a asp-action="Index" style="display: flex; justify-content: center; align-items: center; text-decoration: none; color:#524646; background-color:#E3F2FD; width: 100px; height: 35px; border-radius: 5px; font-size: 20px;">Back </a>
-             </div>
-             </div>
 
         </form>
     </div>
 </div>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
