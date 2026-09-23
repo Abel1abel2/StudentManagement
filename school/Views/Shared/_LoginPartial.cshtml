@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Users> SignInManager
+
+<div class="loginLink">
+    @if(SignInManager.IsSignedIn(User))
+    {
+        <div class="loginBtn">
+            <a  asp-controller="Account" asp-action="Logout" style="text-decoration:none;color:white;" >Logout</a>
+        </div> 
+            
+        }
+        else{
+              <div class="loginBtn login" >
+            <a  asp-controller="Account" style="color:white;text-decoration:none;" asp-action="Login" >Login</a>
+        </div> 
+            
+          <div  class="loginBtn">
+            <a  asp-controller="Account" style="color:white;text-decoration:none;" asp-action="SignUp" >SignUp</a>
+        </div> 
+            
+        }
+</div>

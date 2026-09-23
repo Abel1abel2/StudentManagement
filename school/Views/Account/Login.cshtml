@@ -1,0 +1,77 @@
+﻿@model school.ViewModels.LoginViewModel
+@{
+    ViewData["Title"]= "Login";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+<div class="loginContainer">
+    
+    <div class="loginForm">
+       <div class="headLogin">
+              <a asp-controller="Home" asp-action="Index">
+           <img class="iconImage" src="/asset/icon.png" />
+           </a>
+           <h1>Welcome Back.</h1>
+       </div>
+       <form asp-action="Login" method="post">
+           <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+           <div class="mb-3 mt-10">
+               <label asp-for="Email" class="form-label"></label>
+               <input asp-for="Email" class="form-control" />
+               <span asp-validation-for="Email" class="text-danger"></span>
+           </div>
+
+                
+             <div>
+                   <label asp-for="Password" class="form-label"></label>
+               <input asp-for="Password" class="form-control" />
+               <span asp-validation-for="Password" class="text-danger"></span>
+             </div>
+           
+               <div class="float-end">
+               <a asp-controller="Account" asp-action="VerifyEmail" class="text-decoration-none">
+                   Forget Password?
+               </a>
+           </div>
+
+            <div class="form-check mb-3">
+               <label  class="form-check-label">
+               <input asp-for="RememberMe" class="form-check-input" />
+               @Html.DisplayNameFor(a=>a.RememberMe)
+              </label>
+           </div>
+
+         
+
+           <input type="submit" value="login" class="btn btn-success w-100 p-2" />
+           <p class='text-center mt-2'>
+               Don't Have an Acount?
+               <a asp-controller="Account" asp-action="SignUp" class="text-decoration-none">SignUp</a>
+           </p>
+       </form>
+      
+    </div>
+
+    <div class="loginImage">
+        <div class="card1">
+            <h1>2k+</h1>
+            <p>Students</p>
+        </div>
+        <div class="card2">
+              <h1>5k+</h1>
+            <p>Courses</p>
+        </div>
+        <div class="card3">
+              <h1>10k+</h1>
+            <p>Registered</p>
+        </div>
+       <img class="stuImage" src="/asset/stuLogin.png" />
+    </div>
+</div>
+
+@section Scripts{
+
+@{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
+    }
+}

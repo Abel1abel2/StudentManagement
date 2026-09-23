@@ -1,16 +1,33 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using school.Models;
+using school.ViewModels;
 using System.Diagnostics;
 
 namespace school.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly SignInManager<Users> _signInManager;
+        private readonly UserManager<Users> _userManager;
+        public HomeController(SignInManager<Users> signInManager, UserManager<Users> userManager)
         {
-            return View();
+            _signInManager = signInManager;
+            _userManager = userManager;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var model = new SignUpViewModel();
+            if (_signInManager.IsSignedIn(User))
+            {
+                var currentUser = await _userManager.GetUserAsync(User);
+                model.Name = currentUser?.FullName ?? User.Identity?.Name;
+            }
+            return View(model);
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

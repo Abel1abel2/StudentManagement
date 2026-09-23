@@ -1,0 +1,87 @@
+﻿html, body {
+    margin: 0px;
+    padding: 0px;
+    min-height: 100vh;
+    width: 100%;
+    background-color: #2A6B5C;
+}
+
+.loginContainer{
+
+   
+    min-height:100vh;
+    display:flex;
+  
+
+}
+.loginForm{
+    width:50%;
+    min-height:100vh;
+    background-color:white;
+    display:flex;
+    flex-direction:column;
+    padding-top:80px;
+    padding-left:100px;
+    padding-right:100px;
+}
+.loginImage {
+    width: 50%;
+    height: 100%;
+  
+}
+.iconImage{
+    position:fixed;
+    width:50px;
+    height:50px;
+    cursor:pointer;
+    margin-top:-70px;
+    margin-left:-50px;
+   
+}
+.stuImage{
+    position:fixed;
+    margin-top:150px;
+    width:400px;
+    height:400px;
+    margin-left:100px;
+}
+.card1 {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 150px;
+    margin-left: 380px;
+    background-color: white;
+    border-radius: 10px;
+    width: 140px;
+    height: 80px;
+    box-shadow: black
+    10px 10px 50px;
+}
+.card2 {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 400px;
+    margin-left: 380px;
+    background-color: white;
+    border-radius: 10px;
+    width: 140px;
+    height: 80px;
+    box-shadow: black 10px 10px 50px;
+}
+.card3 {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 230px;
+    margin-left: 100px;
+    background-color: white;
+    border-radius: 10px;
+    width: 100px;
+    height: 80px;
+    box-shadow: black 10px 10px 50px;
+}

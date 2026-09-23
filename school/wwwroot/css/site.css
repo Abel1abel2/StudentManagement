@@ -29,3 +29,40 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.navbar {
+    display: flex;
+    border-radius: 25px;
+    background-color: #092328;
+    width: 80%;
+    height: 70%;
+    padding-left: 20px;
+    font-weight: 100;
+    margin-left: 100px;
+    padding-right: 20px;
+}
+.urlLink {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    gap: 10px;
+}
+.loginLink {
+    display: flex;
+    gap:5px;
+}
+
+.loginBtn {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    height: 35px;
+    background-color: #30AFFF;
+    align-items: center;
+    border-radius: 25px;
+}
+.login {
+    background-color: #092328;
+    border: solid 1px;
+}
